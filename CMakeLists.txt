@@ -35,6 +35,11 @@ set(SQLCIPHER_CRYPTO_BACKEND "openssl" CACHE STRING
 set_property(CACHE SQLCIPHER_CRYPTO_BACKEND PROPERTY STRINGS
     "openssl" "nss" "libtomcrypt" "commoncrypto")
 
+# Log configuration information
+message(STATUS "SQLCipher crypto backend: ${SQLCIPHER_CRYPTO_BACKEND}")
+message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+message(STATUS "CMAKE_FIND_ROOT_PATH: ${CMAKE_FIND_ROOT_PATH}")
+
 # Standard setup
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -46,6 +51,10 @@ if(NOT WIN32)
 endif()
 
 # Platform-specific settings
+message(STATUS "Platform: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "Compiler: ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+
 if(WIN32)
     add_definitions(-DSQLITE_OS_WIN=1)
     if(MSVC)
@@ -53,6 +62,7 @@ if(WIN32)
         add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE)
         # Force include stdint.h for MSVC (Visual Studio 2010+)
         add_compile_options(/FI stdint.h)
+        message(STATUS "Using MSVC compiler with stdint.h forced include")
     endif()
 else()
     add_definitions(-DSQLITE_OS_UNIX=1)
@@ -62,12 +72,19 @@ else()
         add_compile_options(-std=c99)
         # Force include stdint.h to ensure uint64_t types are available
         add_compile_options(-include stdint.h)
+        message(STATUS "Using GCC/Clang compiler with C99 and stdint.h")
     endif()
 endif()
 
 # Find dependencies based on crypto backend
 if(SQLCIPHER_CRYPTO_BACKEND STREQUAL "openssl")
     find_package(OpenSSL REQUIRED)
+    message(STATUS "OpenSSL found: ${OpenSSL_VERSION}")
+    message(STATUS "OpenSSL include dir: ${OPENSSL_INCLUDE_DIR}")
+    message(STATUS "OpenSSL library dir: ${OPENSSL_LIBRARY_DIR}")
+    message(STATUS "OpenSSL libraries: ${OPENSSL_LIBRARIES}")
+    message(STATUS "OpenSSL crypto library: ${OPENSSL_CRYPTO_LIBRARY}")
+    message(STATUS "OpenSSL ssl library: ${OPENSSL_SSL_LIBRARY}")
     set(CRYPTO_LIBRARIES OpenSSL::SSL OpenSSL::Crypto)
     add_definitions(-DSQLCIPHER_CRYPTO_OPENSSL=1)
 elseif(SQLCIPHER_CRYPTO_BACKEND STREQUAL "nss")
