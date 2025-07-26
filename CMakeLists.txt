@@ -118,99 +118,99 @@ endif()
 
 # Source files
 set(SQLCIPHER_SOURCES
-    src/alter.c
-    src/analyze.c
-    src/attach.c
-    src/auth.c
-    src/backup.c
-    src/bitvec.c
-    src/btmutex.c
-    src/btree.c
-    src/build.c
-    src/callback.c
-    src/complete.c
-    src/ctime.c
-    src/date.c
-    src/dbpage.c
-    src/dbstat.c
-    src/delete.c
-    src/expr.c
-    src/fault.c
-    src/fkey.c
-    src/func.c
-    src/global.c
-    src/hash.c
-    src/insert.c
-    src/json.c
-    src/legacy.c
-    src/loadext.c
-    src/main.c
-    src/malloc.c
-    src/mem0.c
-    src/mem1.c
-    src/mem2.c
-    src/mem3.c
-    src/mem5.c
-    src/memdb.c
-    src/memjournal.c
-    src/mutex.c
-    src/mutex_noop.c
-    src/mutex_unix.c
-    src/mutex_w32.c
-    src/notify.c
-    src/os.c
-    src/os_kv.c
-    src/os_unix.c
-    src/os_win.c
-    src/pager.c
-    src/pcache.c
-    src/pcache1.c
-    src/pragma.c
-    src/prepare.c
-    src/printf.c
-    src/random.c
-    src/resolve.c
-    src/rowset.c
-    src/select.c
-    src/status.c
-    src/table.c
-    src/threads.c
-    src/tokenize.c
-    src/treeview.c
-    src/trigger.c
-    src/update.c
-    src/upsert.c
-    src/utf.c
-    src/util.c
-    src/vacuum.c
-    src/vdbe.c
-    src/vdbeapi.c
-    src/vdbeaux.c
-    src/vdbeblob.c
-    src/vdbemem.c
-    src/vdbesort.c
-    src/vdbetrace.c
-    src/vdbevtab.c
-    src/vtab.c
-    src/wal.c
-    src/walker.c
-    src/where.c
-    src/wherecode.c
-    src/whereexpr.c
-    src/window.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/alter.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/analyze.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/attach.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/auth.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/backup.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/bitvec.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/btmutex.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/btree.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/build.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/callback.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/complete.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/ctime.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/date.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dbpage.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dbstat.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/delete.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/expr.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/fault.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/fkey.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/func.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/global.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/hash.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/insert.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/json.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/legacy.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/loadext.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/malloc.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mem0.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mem1.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mem2.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mem3.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mem5.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/memdb.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/memjournal.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mutex.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mutex_noop.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mutex_unix.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mutex_w32.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/notify.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/os.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/os_kv.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/os_unix.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/os_win.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/pager.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/pcache.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/pcache1.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/pragma.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/prepare.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/printf.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/random.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/resolve.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rowset.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/select.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/status.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/table.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/threads.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tokenize.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/treeview.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/trigger.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/update.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/upsert.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utf.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/util.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vacuum.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbe.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbeapi.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbeaux.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbeblob.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbemem.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbesort.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbetrace.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbevtab.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vtab.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/wal.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/walker.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/where.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/wherecode.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/whereexpr.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/window.c
     # SQLCipher sources
-    src/sqlcipher.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/sqlcipher.c
 )
 
 # Add appropriate crypto backend source
 if(SQLCIPHER_CRYPTO_BACKEND STREQUAL "openssl")
-    list(APPEND SQLCIPHER_SOURCES src/crypto_openssl.c)
+    list(APPEND SQLCIPHER_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/crypto_openssl.c)
 elseif(SQLCIPHER_CRYPTO_BACKEND STREQUAL "nss")
-    list(APPEND SQLCIPHER_SOURCES src/crypto_nss.c)
+    list(APPEND SQLCIPHER_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/crypto_nss.c)
 elseif(SQLCIPHER_CRYPTO_BACKEND STREQUAL "libtomcrypt")
-    list(APPEND SQLCIPHER_SOURCES src/crypto_libtomcrypt.c)
+    list(APPEND SQLCIPHER_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/crypto_libtomcrypt.c)
 elseif(SQLCIPHER_CRYPTO_BACKEND STREQUAL "commoncrypto")
-    list(APPEND SQLCIPHER_SOURCES src/crypto_cc.c)
+    list(APPEND SQLCIPHER_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/crypto_cc.c)
 endif()
 
 # Add include directories for extensions
@@ -351,7 +351,7 @@ add_custom_target(generate_headers
 
 # Check if sources exist
 foreach(src_file ${SQLCIPHER_SOURCES})
-    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${src_file}")
+    if(NOT EXISTS "${src_file}")
         message(WARNING "Source file ${src_file} not found")
     endif()
 endforeach()
