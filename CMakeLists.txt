@@ -220,8 +220,9 @@ include_directories(
 )
 
 # Generate required header files
-# Find TCL for header generation
-find_program(TCLSH_EXECUTABLE tclsh tclsh8.6 tclsh8.5 tclsh8.4)
+# Find Python for header generation (cross-platform alternative to TCL)
+find_program(PYTHON_EXECUTABLE python3 python HINTS ENV PATH)
+message(STATUS "Python executable: ${PYTHON_EXECUTABLE}")
 
 # Build mksourceid tool for sqlite3.h generation
 add_executable(mksourceid ${CMAKE_CURRENT_SOURCE_DIR}/tool/mksourceid.c)
@@ -230,17 +231,17 @@ set_target_properties(mksourceid PROPERTIES
 )
 
 # Generate sqlite3.h from sqlite.h.in (contains SQLCipher function declarations)
-if(TCLSH_EXECUTABLE)
+if(PYTHON_EXECUTABLE)
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sqlite3.h
-        COMMAND ${TCLSH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tool/mksqlite3h.tcl ${CMAKE_CURRENT_SOURCE_DIR} -o ${CMAKE_CURRENT_BINARY_DIR}/sqlite3.h
+        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tool/mksqlite3h.py ${CMAKE_CURRENT_SOURCE_DIR} -o ${CMAKE_CURRENT_BINARY_DIR}/sqlite3.h
         DEPENDS
             ${CMAKE_CURRENT_SOURCE_DIR}/src/sqlite.h.in
             ${CMAKE_CURRENT_SOURCE_DIR}/VERSION
             ${CMAKE_CURRENT_SOURCE_DIR}/manifest
             mksourceid
-            ${CMAKE_CURRENT_SOURCE_DIR}/tool/mksqlite3h.tcl
-        COMMENT "Generating sqlite3.h from sqlite.h.in"
+            ${CMAKE_CURRENT_SOURCE_DIR}/tool/mksqlite3h.py
+        COMMENT "Generating sqlite3.h from sqlite.h.in using Python"
     )
 else()
     # Fallback: copy sqlite.h.in to sqlite3.h
@@ -283,15 +284,15 @@ add_custom_command(
     COMMENT "Generating keywordhash.h"
         )
 
-    # Generate opcodes.h (requires TCL)
-if(TCLSH_EXECUTABLE)
+    # Generate opcodes.h (requires Python)
+if(PYTHON_EXECUTABLE)
     # Create CMake script to generate opcodes.h
     set(OPCODES_CMAKE_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/generate_opcodes.cmake)
     file(WRITE ${OPCODES_CMAKE_SCRIPT}
         "# Generate opcodes.h\n"
         "execute_process(\n"
         "    COMMAND \"${CMAKE_COMMAND}\" -E cat \"${CMAKE_CURRENT_BINARY_DIR}/parse.h\" \"${CMAKE_CURRENT_SOURCE_DIR}/src/vdbe.c\"\n"
-        "    COMMAND \"${TCLSH_EXECUTABLE}\" \"${CMAKE_CURRENT_SOURCE_DIR}/tool/mkopcodeh.tcl\"\n"
+        "    COMMAND \"${PYTHON_EXECUTABLE}\" \"${CMAKE_CURRENT_SOURCE_DIR}/tool/mkopcodeh.py\"\n"
         "    OUTPUT_FILE \"${CMAKE_CURRENT_BINARY_DIR}/opcodes.h\"\n"
         "    RESULT_VARIABLE opcodes_result\n"
         ")\n"
@@ -303,8 +304,8 @@ if(TCLSH_EXECUTABLE)
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/opcodes.h
         COMMAND ${CMAKE_COMMAND} -P ${OPCODES_CMAKE_SCRIPT}
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/parse.h ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbe.c ${CMAKE_CURRENT_SOURCE_DIR}/tool/mkopcodeh.tcl
-        COMMENT "Generating opcodes.h"
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/parse.h ${CMAKE_CURRENT_SOURCE_DIR}/src/vdbe.c ${CMAKE_CURRENT_SOURCE_DIR}/tool/mkopcodeh.py
+        COMMENT "Generating opcodes.h using Python"
     )
 
     # Create CMake script to generate opcodes.c
@@ -312,7 +313,7 @@ if(TCLSH_EXECUTABLE)
     file(WRITE ${OPCODES_C_CMAKE_SCRIPT}
         "# Generate opcodes.c\n"
         "execute_process(\n"
-        "    COMMAND \"${TCLSH_EXECUTABLE}\" \"${CMAKE_CURRENT_SOURCE_DIR}/tool/mkopcodec.tcl\" \"${CMAKE_CURRENT_BINARY_DIR}/opcodes.h\"\n"
+        "    COMMAND \"${PYTHON_EXECUTABLE}\" \"${CMAKE_CURRENT_SOURCE_DIR}/tool/mkopcodec.py\" \"${CMAKE_CURRENT_BINARY_DIR}/opcodes.h\"\n"
         "    OUTPUT_FILE \"${CMAKE_CURRENT_BINARY_DIR}/opcodes.c\"\n"
         "    RESULT_VARIABLE opcodes_c_result\n"
         ")\n"
@@ -324,12 +325,12 @@ if(TCLSH_EXECUTABLE)
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/opcodes.c
         COMMAND ${CMAKE_COMMAND} -P ${OPCODES_C_CMAKE_SCRIPT}
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/opcodes.h ${CMAKE_CURRENT_SOURCE_DIR}/tool/mkopcodec.tcl
-        COMMENT "Generating opcodes.c"
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/opcodes.h ${CMAKE_CURRENT_SOURCE_DIR}/tool/mkopcodec.py
+        COMMENT "Generating opcodes.c using Python"
     )
     set(GENERATED_OPCODES_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/opcodes.c)
 else()
-    message(WARNING "TCL not found - opcodes.h and opcodes.c will not be generated. Some functionality may be missing.")
+    message(WARNING "Python not found - opcodes.h and opcodes.c will not be generated. Some functionality may be missing.")
     set(GENERATED_OPCODES_SOURCES "")
 endif()
 
@@ -413,20 +414,17 @@ if(SQLCIPHER_ENABLE_CLI)
     set(SHELL_C "${CMAKE_CURRENT_BINARY_DIR}/shell.c")
 
     if(EXISTS "${SHELL_C_IN}")
-        # Try to find tclsh for generating shell.c
-        find_program(TCLSH_EXECUTABLE tclsh tclsh8.6 tclsh8.5 tclsh8.4)
-
-        if(TCLSH_EXECUTABLE AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tool/mkshellc.tcl")
-            # Generate shell.c using the original TCL script (preferred method)
+        if(PYTHON_EXECUTABLE AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tool/mkshellc.py")
+            # Generate shell.c using the Python script (preferred method)
             add_custom_command(
                 OUTPUT ${SHELL_C}
-                COMMAND ${TCLSH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tool/mkshellc.tcl ${SHELL_C}
-                DEPENDS ${SHELL_C_IN} ${CMAKE_CURRENT_SOURCE_DIR}/tool/mkshellc.tcl
+                COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tool/mkshellc.py ${SHELL_C}
+                DEPENDS ${SHELL_C_IN} ${CMAKE_CURRENT_SOURCE_DIR}/tool/mkshellc.py
                 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                COMMENT "Generating shell.c using TCL script (full-featured)"
+                COMMENT "Generating shell.c using Python script (full-featured)"
             )
             set(CLI_SOURCES ${SHELL_C})
-            message(STATUS "Using TCL to generate shell.c (recommended)")
+            message(STATUS "Using Python to generate shell.c (recommended)")
         else()
             # Cross-platform fallback: copy shell.c.in to shell.c
             # Note: shell.c.in is valid C code and will work on all platforms
@@ -437,9 +435,9 @@ if(SQLCIPHER_ENABLE_CLI)
                 COMMENT "Using shell.c.in directly (cross-platform fallback)"
             )
             set(CLI_SOURCES ${SHELL_C})
-            if(NOT TCLSH_EXECUTABLE)
-                message(STATUS "TCL not found - using fallback method for shell.c")
-                message(STATUS "  To get full shell features, install TCL: https://www.tcl.tk/")
+            if(NOT PYTHON_EXECUTABLE)
+                message(STATUS "Python not found - using fallback method for shell.c")
+                message(STATUS "  To get full shell features, install Python: https://www.python.org/")
             endif()
         endif()
     else()
