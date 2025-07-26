@@ -42,6 +42,9 @@ def parse_input():
     """Parse input from stdin (concatenated parse.h and vdbe.c)"""
     tk_values = {}
     opcodes = {}
+    used = {}
+    def_val = {}
+    same_as = {}
     current_op = None
     prev_name = None
     n_op = 0
@@ -115,39 +118,41 @@ def parse_input():
             out3[name] = 0
             ncycle[name] = 0
 
-            # Parse properties from the case line
-            parts = line.split()
-            i = 2  # Skip "case" and opcode name
-            while i < len(parts) - 1:
-                part = parts[i].rstrip(',')
-                if part == 'same':
-                    i += 1
-                    if i < len(parts) and parts[i] == 'as':
-                        i += 1
-                        if i < len(parts):
-                            sym = parts[i].rstrip(',')
-                            if sym in tk_values:
-                                opcodes[name] = tk_values[sym]
-                elif part == 'group':
+            # Parse properties from the comment part of the case line
+            comment_match = re.search(r'/\*\s*(.*?)\s*\*/', line)
+            if comment_match:
+                comment = comment_match.group(1)
+                # Parse "same as TK_xxx" part
+                same_match = re.search(r'same\s+as\s+(TK_\w+)', comment)
+                if same_match:
+                    sym = same_match.group(1)
+                    if sym in tk_values:
+                        val = tk_values[sym]
+                        opcodes[name] = val
+                        used[val] = 1
+                        same_as[val] = sym
+                        def_val[val] = name
+
+                # Parse properties
+                if 'group' in comment:
                     groups[name] = 1
-                elif part == 'jump':
+                if 'jump' in comment:
                     jump[name] = 1
-                elif part == 'in1':
+                if 'in1' in comment:
                     in1[name] = 1
-                elif part == 'in2':
+                if 'in2' in comment:
                     in2[name] = 1
-                elif part == 'in3':
+                if 'in3' in comment:
                     in3[name] = 1
-                elif part == 'out2':
+                if 'out2' in comment:
                     out2[name] = 1
-                elif part == 'out3':
+                if 'out3' in comment:
                     out3[name] = 1
-                elif part == 'ncycle':
+                if 'ncycle' in comment:
                     ncycle[name] = 1
-                elif part == 'jump0':
+                if 'jump0' in comment:
                     jump[name] = 1
                     jump0[name] = 1
-                i += 1
 
             # Handle grouping
             if groups[name]:
@@ -168,6 +173,9 @@ def parse_input():
     return {
         'tk_values': tk_values,
         'opcodes': opcodes,
+        'used': used,
+        'def_val': def_val,
+        'same_as': same_as,
         'groups': groups,
         'jump': jump,
         'jump0': jump0,
@@ -189,6 +197,9 @@ def generate_opcodes(data):
     """Generate the opcodes.h file content"""
     tk_values = data['tk_values']
     opcodes = data['opcodes']
+    used = data['used']
+    def_val = data['def_val']
+    same_as = data['same_as']
     groups = data['groups']
     jump = data['jump']
     jump0 = data['jump0']
@@ -225,9 +236,6 @@ def generate_opcodes(data):
     }
 
     # Assign numbers to opcodes
-    used = {}
-    def_val = {}
-    same_as = {}
     cnt = -1
 
     # Assign the smallest values to opcodes that are processed by resolveP2Values()
