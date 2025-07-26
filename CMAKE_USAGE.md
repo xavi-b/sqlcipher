@@ -105,19 +105,19 @@ brew install openssl
 **For CLI shell (optional but recommended):**
 ```bash
 # Ubuntu/Debian
-sudo apt-get install tcl
+sudo apt-get install python3
 
 # CentOS/RHEL/Fedora
-sudo yum install tcl
+sudo yum install python3
 
 # macOS
-brew install tcl-tk
+brew install python3
 
 # Windows
-# Download from https://www.tcl.tk/ or use package manager
+# Download from https://www.python.org/ or use package manager
 ```
 
-**Note**: TCL is used to generate the full-featured CLI shell. Without TCL, a fallback method is used that works but may have fewer features.
+**Note**: Python is used to generate the full-featured CLI shell and other header files. Without Python, fallback methods are used that work but may have fewer features.
 
 **For NSS backend:**
 ```bash
@@ -215,28 +215,28 @@ cmake .. \
 ```
 
 ### CLI Shell Issues
-If you get warnings about TCL not being found:
+If you get warnings about Python not being found:
 
 ```bash
 # The build will work but use a fallback method
-# To get the full-featured shell, install TCL:
+# To get the full-featured shell, install Python:
 
 # Linux
-sudo apt-get install tcl
+sudo apt-get install python3
 
 # macOS
-brew install tcl-tk
+brew install python3
 
-# Windows - download from https://www.tcl.tk/
+# Windows - download from https://www.python.org/
 ```
 
-The fallback method copies `shell.c.in` directly and works on all platforms, but the TCL-generated version has additional features and optimizations.
+The fallback method copies `shell.c.in` directly and works on all platforms, but the Python-generated version has additional features and optimizations.
 
 ### Missing Generated Files
 When building from individual source files, SQLite requires several generated header files:
 
 - `parse.h` - Generated from `src/parse.y` using lemon parser
-- `opcodes.h` - Generated using TCL scripts (requires TCL)
+- `opcodes.h` - Generated using Python scripts (requires Python)
 - `keywordhash.h` - Generated using mkkeywordhash tool
 
 The CMake build automatically generates these files, but:
