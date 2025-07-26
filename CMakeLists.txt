@@ -66,6 +66,11 @@ if(WIN32)
     endif()
 else()
     add_definitions(-DSQLITE_OS_UNIX=1)
+    if(APPLE)
+        # Enable BSD-style types (u_int, u_char, u_short, etc.) on macOS
+        add_definitions(-D_DARWIN_C_SOURCE)
+        message(STATUS "Added macOS-specific definitions for BSD types")
+    endif()
     if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
         add_compile_options(-Wall -Wextra)
         # Ensure stdint.h and other C99 headers are available
