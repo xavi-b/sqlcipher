@@ -20,8 +20,8 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Build options
-option(SQLCIPHER_ENABLE_SHARED "Build shared library" OFF)
-option(SQLCIPHER_ENABLE_STATIC "Build static library" ON)
+option(SQLCIPHER_ENABLE_SHARED "Build shared library" ON)
+option(SQLCIPHER_ENABLE_STATIC "Build static library" OFF)
 option(SQLCIPHER_ENABLE_CLI "Build command line interface" ON)
 option(SQLCIPHER_ENABLE_TESTS "Build test programs" OFF)
 
