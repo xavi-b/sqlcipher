@@ -83,7 +83,7 @@ cmake .. \
 ### Complete Example with OpenSSL 3 root dir on Windows
 
 ```
-cmake -G "Ninja" .. -DCMAKE_BUILD_TYPE=Release -DSQLCIPHER_CRYPTO_BACKEND=openssl -DCMAKE_INSTALL_PREFIX=..\install -DSQLCIPHER_ENABLE_SHARED=OFF -DOPENSSL_ROOT_DIR=C:\Qt\Tools\OpenSSLv3\Win_x64
+cmake -G "Ninja" .. -DCMAKE_BUILD_TYPE=Release -DSQLCIPHER_CRYPTO_BACKEND=openssl -DCMAKE_INSTALL_PREFIX=..\install -DOPENSSL_ROOT_DIR=C:\Qt\Tools\OpenSSLv3\Win_x64
 ```
 
 ## Prerequisites
