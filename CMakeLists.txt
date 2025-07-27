@@ -127,6 +127,7 @@ add_definitions(
     -DSQLITE_EXTRA_SHUTDOWN=sqlcipher_extra_shutdown
     -DSQLITE_TEMP_STORE=2
     -DSQLITE_THREADSAFE=1
+    -DSQLITE_ENABLE_COLUMN_METADATA=1
 )
 
 # System libraries
